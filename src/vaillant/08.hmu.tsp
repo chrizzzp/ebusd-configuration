@@ -482,7 +482,8 @@ namespace Hmu {
     /** Target Hwc temperature */
     temp: temp;
   }
-  // Total heating yields
+  
+   // Total heating yields
 
   /** default *r */
   @base(MF, 0x16, 0x18)
@@ -1607,6 +1608,7 @@ namespace Hmu {
   }
 
   /** compressor runtime in min and starts in Hc mode */
+  @condition(Id.Id.sw, ">=902")
   @inherit(r_1)
   @ext(0x18, 1)
   model RunStatsCompressorHc {
@@ -1616,6 +1618,7 @@ namespace Hmu {
   }
 
   /** compressor runtime in min and starts in Hwc mode */
+  @condition(Id.Id.sw, ">=902")
   @inherit(r_1)
   @ext(0x18, 0x2)
   model RunStatsCompressorHwc {
@@ -1623,6 +1626,24 @@ namespace Hmu {
     runtime: minutes4;
     cycles: cntstarts;
   }
+ 
+  // Current electrical power consumption in W (SW>901)
+  // as polled every minute by gateway for EEBUS LCP 
+  /** default *r */
+  @base(MF, 0x16)
+  model r_8 {
+    @maxLength(1)
+    ign: IGN;
+  }
+  
+  @condition(Id.Id.sw, ">=901")
+  @inherit(r_8)
+  @ext(0x14)
+  model ElectricPowerConsumption {
+    @unit("W")
+    value: EXP;
+  }
+
 
   enum Values_state {
     ready: 0x01,
