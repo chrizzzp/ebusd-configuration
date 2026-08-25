@@ -1466,6 +1466,7 @@ namespace Hmu {
   @ext(0x53, 0xd)
   model RunDataStatuscode {
     value: hmucode;
+    value2: hmucode;
   }
 
   @inherit(r_7)
